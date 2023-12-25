@@ -69,9 +69,18 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       hideInput = false;
       outputSize = 34;
-      input += value;
+      if (isOperator(input.isNotEmpty ? input[input.length - 1] : '')) {
+        input = input.substring(0, input.length - 1) + value;
+      } else {
+        input += value;
+      }
     }
 
     setState(() {});
+  }
+
+  bool isOperator(String value) {
+    List<String> operators = ['+', '-', 'x', '/'];
+    return operators.contains(value);
   }
 }
