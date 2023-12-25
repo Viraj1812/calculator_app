@@ -69,7 +69,9 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       hideInput = false;
       outputSize = 34;
-      if (isOperator(input.isNotEmpty ? input[input.length - 1] : '')) {
+      if (isOperator(value) &&
+          input.isNotEmpty &&
+          isOperator(input[input.length - 1])) {
         input = input.substring(0, input.length - 1) + value;
       } else {
         input += value;
