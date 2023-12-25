@@ -14,11 +14,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   double firstNo = 0.0;
   double secondNo = 0.0;
-  var input = '';
-  var output = '';
-  var operator = '';
-  var hideInput = false;
-  var outputSize = 34.0;
+  String input = '';
+  String output = '';
+  String operator = '';
+  bool hideInput = false;
+  double outputSize = 34.0;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  onButtonClick(String value) {
+  void onButtonClick(String value) {
     if (value == 'AC') {
       input = '';
       output = '';
