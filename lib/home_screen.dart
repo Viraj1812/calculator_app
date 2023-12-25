@@ -3,6 +3,7 @@ import 'package:calculator_app/diaplay.dart';
 import 'package:calculator_app/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -66,6 +67,15 @@ class _HomeScreenState extends State<HomeScreen> {
         hideInput = true;
         outputSize = 52;
       }
+    } else if (input.isEmpty && isOperator(value)) {
+      Fluttertoast.showToast(
+          msg: "Invalid Format Used",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     } else {
       hideInput = false;
       outputSize = 34;
