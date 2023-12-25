@@ -28,6 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -38,6 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Text(
               'Calculator',
               style: GoogleFonts.montserrat(
+                color: Colors.white,
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
               ),

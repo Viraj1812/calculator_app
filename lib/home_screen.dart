@@ -17,26 +17,38 @@ class _HomeScreenState extends State<HomeScreen> {
   double secondNo = 0.0;
 
   var input = '';
-
   var output = '';
-
   var operator = '';
+  var hideInput = false;
+  var outputSize = 34.0;
 
   onButtonClick(value) {
     if (value == 'AC') {
       input = '';
       output = '';
     } else if (value == '<') {
-      input = input.substring(0, input.length - 1);
+      if (input.isNotEmpty) {
+        input = input.substring(0, input.length - 1);
+      }
     } else if (value == '=') {
-      var userInput = input;
-      userInput = input.replaceAll('x', '*');
-      Parser p = Parser();
-      Expression expression = p.parse(userInput);
-      ContextModel cm = ContextModel();
-      var finalValue = expression.evaluate(EvaluationType.REAL, cm);
-      output = finalValue.toString();
+      if (input.isNotEmpty) {
+        var userInput = input;
+        userInput = input.replaceAll('x', '*');
+        Parser p = Parser();
+        Expression expression = p.parse(userInput);
+        ContextModel cm = ContextModel();
+        var finalValue = expression.evaluate(EvaluationType.REAL, cm);
+        output = finalValue.toString();
+        if (output.endsWith(".0")) {
+          output = output.substring(0, output.length - 2);
+        }
+        input = output;
+        hideInput = true;
+        outputSize = 52;
+      }
     } else {
+      hideInput = false;
+      outputSize = 34;
       input += value;
     }
 
@@ -59,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      input,
+                      hideInput ? '' : input,
                       style: GoogleFonts.montserrat(
                           fontSize: 40, color: Colors.white),
                     ),
@@ -69,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text(
                       output,
                       style: GoogleFonts.montserrat(
-                          fontSize: 40, color: Colors.white),
+                          fontSize: outputSize, color: Colors.white),
                     ),
                     const SizedBox(
                       height: 40,
