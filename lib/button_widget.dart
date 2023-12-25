@@ -1,4 +1,3 @@
-import 'package:calculator_app/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -6,8 +5,8 @@ class ButtonWidget extends StatelessWidget {
   const ButtonWidget({
     required this.text,
     required this.press,
-    this.tColor = Colors.white,
-    this.buttonBgColor = buttonColor,
+    required this.tColor,
+    required this.buttonBgColor,
     super.key,
   });
 
@@ -28,7 +27,11 @@ class ButtonWidget extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               )),
-          onPressed: () => press(),
+          onPressed: () {
+            Future.microtask(() {
+              press();
+            });
+          },
           child: Text(
             text,
             style: GoogleFonts.montserrat(
