@@ -2,8 +2,8 @@ import 'package:calculator_app/button_row.dart';
 import 'package:calculator_app/diaplay.dart';
 import 'package:calculator_app/helper.dart';
 import 'package:flutter/material.dart';
-import 'package:math_expressions/math_expressions.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,13 +13,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  double firstNo = 0.0;
-  double secondNo = 0.0;
-  String input = '';
-  String output = '';
-  String operator = '';
-  bool hideInput = false;
-  double outputSize = 34.0;
+  ValueNotifier<String> inputNotifier = ValueNotifier<String>('');
+  ValueNotifier<String> outputNotifier = ValueNotifier<String>('');
+  ValueNotifier<bool> hideInputNotifier = ValueNotifier<bool>(false);
+  ValueNotifier<double> outputSizeNotifier = ValueNotifier<double>(34.0);
+
+  // double firstNo = 0.0;
+  // double secondNo = 0.0;
+  // String input = '';
+  // String output = '';
+  // String operator = '';
+  // bool hideInput = false;
+  // double outputSize = 34.0;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +33,19 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.black,
         body: Column(
           children: [
-            Display(
-                input: hideInput ? '' : input,
-                output: output,
-                outputSize: outputSize),
+            // Display(
+            //     input: hideInput ? '' : input,
+            //     output: output,
+            //     outputSize: outputSize),
+            ValueListenableBuilder<String>(
+              valueListenable: inputNotifier,
+              builder: (context, input, _) {
+                return Display(
+                    input: hideInputNotifier.value ? '' : input,
+                    output: outputNotifier.value,
+                    outputSize: outputSizeNotifier.value);
+              },
+            ),
             ButtonRow(
                 ls: buttonValues,
                 tColor: tColor,
@@ -45,29 +59,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void onButtonClick(String value) {
     if (value == 'AC') {
-      input = '';
-      output = '';
+      inputNotifier.value = '';
+      outputNotifier.value = '';
     } else if (value == '<') {
-      if (input.isNotEmpty) {
-        input = input.substring(0, input.length - 1);
+      if (inputNotifier.value.isNotEmpty) {
+        inputNotifier.value =
+            inputNotifier.value.substring(0, inputNotifier.value.length - 1);
       }
     } else if (value == '=') {
-      if (input.isNotEmpty) {
-        var userInput = input;
-        userInput = input.replaceAll('x', '*');
+      if (inputNotifier.value.isNotEmpty) {
+        var userInput = inputNotifier.value;
+        userInput = inputNotifier.value.replaceAll('x', '*');
         Parser p = Parser();
         Expression expression = p.parse(userInput);
         ContextModel cm = ContextModel();
         var finalValue = expression.evaluate(EvaluationType.REAL, cm);
-        output = finalValue.toString();
-        if (output.endsWith(".0")) {
-          output = output.substring(0, output.length - 2);
+        outputNotifier.value = finalValue.toString();
+        if (outputNotifier.value.endsWith(".0")) {
+          outputNotifier.value = outputNotifier.value
+              .substring(0, outputNotifier.value.length - 2);
         }
-        input = output;
-        hideInput = true;
-        outputSize = 52;
+        inputNotifier.value = outputNotifier.value;
+        hideInputNotifier.value = true;
+        outputSizeNotifier.value = 52;
       }
-    } else if (input.isEmpty && isOperator(value)) {
+    } else if (inputNotifier.value.isEmpty && isOperator(value)) {
       Fluttertoast.showToast(
           msg: "Invalid Format Used",
           toastLength: Toast.LENGTH_SHORT,
@@ -77,18 +93,20 @@ class _HomeScreenState extends State<HomeScreen> {
           textColor: Colors.white,
           fontSize: 16.0);
     } else {
-      hideInput = false;
-      outputSize = 34;
+      hideInputNotifier.value = false;
+      outputSizeNotifier.value = 34;
       if (isOperator(value) &&
-          input.isNotEmpty &&
-          isOperator(input[input.length - 1])) {
-        input = input.substring(0, input.length - 1) + value;
+          inputNotifier.value.isNotEmpty &&
+          isOperator(inputNotifier.value[inputNotifier.value.length - 1])) {
+        inputNotifier.value =
+            inputNotifier.value.substring(0, inputNotifier.value.length - 1) +
+                value;
       } else {
-        input += value;
+        inputNotifier.value += value;
       }
     }
 
-    setState(() {});
+    // setState(() {});
   }
 
   bool isOperator(String value) {
