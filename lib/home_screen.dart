@@ -18,14 +18,6 @@ class _HomeScreenState extends State<HomeScreen> {
   ValueNotifier<bool> hideInputNotifier = ValueNotifier<bool>(false);
   ValueNotifier<double> outputSizeNotifier = ValueNotifier<double>(34.0);
 
-  // double firstNo = 0.0;
-  // double secondNo = 0.0;
-  // String input = '';
-  // String output = '';
-  // String operator = '';
-  // bool hideInput = false;
-  // double outputSize = 34.0;
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -33,10 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.black,
         body: Column(
           children: [
-            // Display(
-            //     input: hideInput ? '' : input,
-            //     output: output,
-            //     outputSize: outputSize),
             ValueListenableBuilder<String>(
               valueListenable: inputNotifier,
               builder: (context, input, _) {
@@ -105,8 +93,6 @@ class _HomeScreenState extends State<HomeScreen> {
         inputNotifier.value += value;
       }
     }
-
-    // setState(() {});
   }
 
   bool isOperator(String value) {
